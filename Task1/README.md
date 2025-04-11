@@ -107,13 +107,13 @@ docker push 2025sizhao/ubuntu-custom
 
 How to use:
 
-### 1. Pull the Docker image
+### ①. Pull the Docker image
 Use the following command to pull the image from Docker Hub:
 ```bash
 docker pull 2025sizhao/ubuntu-custom:latest
 ```
 
-### 2. Run the container
+### ②. Run the container
 To run the container interactively:
 ```bash
 docker run --rm -it 2025sizhao/ubuntu-custom
