@@ -78,11 +78,11 @@ Server: Receive the numbers and calculate: Mean, Median and Standard Deviation.T
 Files:
 
 
-[ipc_client.py]
+[ipc_client.py](https://github.com/ZhaoMengqi2024/EEEN40660-_A2_Si-Zhao/blob/master/Task2/Task2_123/ipc_client.py)
 
-[ipc_server.py]
+[ipc_server.py](https://github.com/ZhaoMengqi2024/EEEN40660-_A2_Si-Zhao/blob/master/Task2/Task2_123/ipc_server.py)
 
-[Dockerfile]
+[Dockerfile](https://github.com/ZhaoMengqi2024/EEEN40660-_A2_Si-Zhao/blob/master/Task2/Task2_123/Dockerfile)
 
 Build Docker Image
 ```bash
