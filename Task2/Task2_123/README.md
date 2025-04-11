@@ -29,7 +29,7 @@ ping 172.17.0.3
 ping 172.17.0.4
 ```
 repeated above steps and test the ping between alpine2 and alpine3
-
+---
 ## 2. IPC Between Ubuntu Containers (Unix Socket)
 Create Project Folder and Script
 ```bash
@@ -62,6 +62,7 @@ python3
 Send Message The client creates a socket to /tmp/ipc_socket and sends "Hello from client".
 
 The server receives and prints the message, confirming IPC success.
+---
 ## 3. IPC-Based Offloading Simulation
 Extending Task 2, this part implements a simple offloading simulation:
 
@@ -70,6 +71,8 @@ Client: Generate 50 random floats and send them to the server.
 Server: Receive the numbers and calculate: Mean, Median and Standard Deviation.Then, send results back to client.
 
 Files:
+
+
 [ipc_client.py]
 
 [ipc_server.py]
@@ -88,6 +91,8 @@ docker run --rm -it --name server -v ipc_volume:/tmp ubuntu_ipc
 docker run --rm -it --name client --volumes-from server ubuntu_ipc python3 /ipc_client.py
 ```
 Output:
+
+
 Both containers print:
 
 The original 50 numbers
