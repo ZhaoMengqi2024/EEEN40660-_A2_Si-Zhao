@@ -1,144 +1,95 @@
+# Task2_123 - Docker Networking & IPC Demonstration
 
-# Task 1: Basic Docker Virtualization - COMP40660
-
-## Overview
-
-This Docker image was created for **COMP40660 Assignment 2 - Task 1**. It demonstrates the usage of Ubuntu-based Docker containers with essential tools and a custom file to fulfill six core tasks related to containerization.
-
-Docker Hub URL: https://hub.docker.com/r/2025sizhao/ubuntu-custom
+This directory contains solutions to the first three sub-tasks of **COMP40660 Assignment 2 - Task 2**, focusing on Docker networking and inter-process communication (IPC) between containers.
 
 ---
 
-## 1. Pull and Run Popular Docker Images
+## 1. Docker Bridge Networking with Alpine Containers
 
-We tested the following common Docker images:
-- `hello-world`
-- `Alpine`
-- `Nginx`
-- `busybox`
-
-Example commands:
+Pull and Run Alpine Containers
 ```bash
-sudo docker run hello-world
-sudo docker run alpine echo "Hello from Alpine"
-sudo docker run -d -p 8080:80 nginx
-sudo docker run busybox echo "Hello from BusyBox"
+   docker pull alpine
+   docker run -dit --name alpine1 alpine sh
+   docker run -dit --name alpine2 alpine sh
+   docker run -dit --name alpine3 alpine sh
 ```
-
----
-
-## 2. Show Running Containers
-
-We listed all containers and images:
+Get Container IP Addresses
 ```bash
-sudo docker ps -a
-sudo docker images
+Command: docker inspect -f '{{ .Name }} - {{ .NetworkSettings.IPAddress }}' $(docker ps -q)
 ```
-We stop them using:
+Enter the container and install ping in Alpine
 ```bash
-sudo docker stop $(sudo docker ps -q)
+docker exec -it alpine1 sh
+apk update
+apk add iputils
 ```
-We removed all containers and images using:
+Ping the Other Containers
 ```bash
-sudo docker rm $(sudo docker ps -a -q)
-sudo docker rmi $(sudo docker images -q)
+ping 172.17.0.3
+ping 172.17.0.4
 ```
----
-## 3. Run Nginx Server with Custom HTML Message
+repeated above steps and test the ping between alpine2 and alpine3
 
-Create a Local Directory
-
+## 2. IPC Between Ubuntu Containers (Unix Socket)
+Create Project Folder and Script
 ```bash
-mkdir ~/our-nginx-site
-cd ~/our-nginx-site
+mkdir docker_ipc && cd docker_ipc
+nano ipc_server.py
 ```
-Create an index.html File
+Create Dockerfile The Dockerfile installs Python3, copies the ipc_server.py script, and sets it as the default command.
 
+Build the Docker image
 ```bash
-nano index.html
+docker build -t ubuntu_ipc
 ```
-Click the link to open the file we created: 
-
-```html
-indexhtml
-```
-
-Run the Nginx Docker Container with Volume Mount
+Create Shared Volume
 ```bash
-sudo docker run -d -p 8081:80 -v ~/our-nginx-site:/usr/share/nginx/html:ro nginx
+
+docker volume create ipc_volume
 ```
-
-Open your web browser and visit:
-
-```html
-http://localhost
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 4. Boot Ubuntu Container and Install Tools
-
-We installed tools like `nano` and `iputils-ping`:
+Run Server Container
 ```bash
-docker run --rm -it ubuntu bash
-apt update && apt install -y nano iputils-ping
+
+docker run --rm -it --name server -v ipc_volume:/tmp ubuntu_ipc
 ```
-
----
-
-## 5. Create Directory and File Inside Container
-
-Inside Ubuntu container:
+Run Client Container
 ```bash
-mkdir -p /opt/task1
-echo "Group: COMP40660 - Sizhao 2025" > /opt/task1/annotation.txt
-cat /opt/task1/annotation.txt
+docker run --rm -it --name client --volumes-from server ubuntu:latest
+apt update && apt install -y python3
+python3
+
 ```
+Send Message The client creates a socket to /tmp/ipc_socket and sends "Hello from client".
 
----
+The server receives and prints the message, confirming IPC success.
+## 3. IPC-Based Offloading Simulation
+Extending Task 2, this part implements a simple offloading simulation:
 
-## 6. Commit Image and Push to Docker Hub
+Client: Generate 50 random floats and send them to the server.
 
+Server: Receive the numbers and calculate: Mean, Median and Standard Deviation.Then, send results back to client.
+
+Files:
+[ipc_client.py]
+
+[ipc_server.py]
+
+[Dockerfile]
+
+Build Docker Image
 ```bash
-docker commit <container_id> 2025sizhao/ubuntu-custom
-docker push 2025sizhao/ubuntu-custom
-```
 
-To run it:
+docker build -t ubuntu_ipc .
+```
+Run Containers
 ```bash
-docker pull 2025sizhao/ubuntu-custom
-docker run --rm -it 2025sizhao/ubuntu-custom
+
+docker run --rm -it --name server -v ipc_volume:/tmp ubuntu_ipc
+docker run --rm -it --name client --volumes-from server ubuntu_ipc python3 /ipc_client.py
 ```
+Output:
+Both containers print:
 
----
+The original 50 numbers
 
-## Dockerfile Summary
-
-```Dockerfile
-FROM ubuntu:latest
-RUN apt update && apt install -y python3 nano iputils-ping
-COPY ipc_server.py /ipc_server.py
-CMD ["python3", "/ipc_server.py"]
-```
-
----
-## Author
-
-Created by [2025sizhao](https://hub.docker.com/u/2025sizhao)
+Calculated mean, median, and std deviation
