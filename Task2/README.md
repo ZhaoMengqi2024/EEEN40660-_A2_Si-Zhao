@@ -13,52 +13,69 @@ Docker Hub URL: https://hub.docker.com/r/2025sizhao/ubuntu-custom
 
 We tested the following common Docker images:
 - `hello-world`
-- `nginx`
+- `Alpine`
+- `Nginx`
 - `busybox`
 
 Example commands:
 ```bash
-docker run hello-world
-docker run -d --name mynginx nginx
-docker run -it busybox
+sudo docker run hello-world
+sudo docker run alpine echo "Hello from Alpine"
+sudo docker run -d -p 8080:80 nginx
+sudo docker run busybox echo "Hello from BusyBox"
 ```
 
 ---
 
-## 2. Show Running Containers and Images
+## 2. Show Running Containers
 
 We listed all containers and images:
 ```bash
-docker ps -a
-docker images
+sudo docker ps -a
+sudo docker images
 ```
-
-We removed them using:
+We stop them using:
 ```bash
-docker rm <container_id>
-docker rmi <image_id>
+sudo docker stop $(sudo docker ps -q)
 ```
-
+We removed all containers and images using:
+```bash
+sudo docker rm $(sudo docker ps -a -q)
+sudo docker rmi $(sudo docker images -q)
+```
 ---
-
 ## 3. Run Nginx Server with Custom HTML Message
 
-We launched an Nginx container with a mounted custom `index.html`:
+### Step 1: Create a Custom HTML File
+
+Create a file named `custom-index.html` with the following sample HTML content:
+
+```html
+<h1>Hello from Group COMP40660!</h1>
+<p>Group Members: Sizhao 2025</p>
+```
+
+### Step 2: Launch Nginx Container
+
+Use the following Docker command to run an Nginx container with the custom `index.html` mounted:
+
 ```bash
 docker run --rm -d -p 80:80 \
 -v $(pwd)/custom-index.html:/usr/share/nginx/html/index.html \
 --name custom-nginx nginx
 ```
 
-Sample HTML content:
-```html
-<h1>Hello from Group COMP40660!</h1>
-<p>Group Members: Sizhao 2025</p>
+### Step 3: Verify the Server
+
+Open your web browser and visit:
+
+```
+http://localhost
 ```
 
-Visit `http://localhost` to verify.
+You should see your custom HTML message displayed.
 
----
+
 
 ## 4. Boot Ubuntu Container and Install Tools
 
