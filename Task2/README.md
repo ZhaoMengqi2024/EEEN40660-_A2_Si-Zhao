@@ -46,34 +46,50 @@ sudo docker rmi $(sudo docker images -q)
 ---
 ## 3. Run Nginx Server with Custom HTML Message
 
-### Step 1: Create a Custom HTML File
-
-Create a file named `custom-index.html` with the following sample HTML content:
-
-```html
-<h1>Hello from Group COMP40660!</h1>
-<p>Group Members: Sizhao 2025</p>
-```
-
-### Step 2: Launch Nginx Container
-
-Use the following Docker command to run an Nginx container with the custom `index.html` mounted:
+Create a Local Directory
 
 ```bash
-docker run --rm -d -p 80:80 \
--v $(pwd)/custom-index.html:/usr/share/nginx/html/index.html \
---name custom-nginx nginx
+mkdir ~/our-nginx-site
+cd ~/our-nginx-site
+```
+Create an index.html File
+
+```bash
+nano index.html
+```
+Click the link to open the file we created: 
+
+```html
+indexhtml
 ```
 
-### Step 3: Verify the Server
+Run the Nginx Docker Container with Volume Mount
+```bash
+sudo docker run -d -p 8081:80 -v ~/our-nginx-site:/usr/share/nginx/html:ro nginx
+```
 
 Open your web browser and visit:
 
-```
+```html
 http://localhost
 ```
 
-You should see your custom HTML message displayed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
