@@ -24,7 +24,7 @@ docker run hello-world
 sudo docker run alpine echo "Hello from Alpine"
 sudo docker run -d -p 8080:80 nginx
 sudo docker run busybox echo "Hello from BusyBox"
-
+```
 ---
 
 ## 2. Show Running Containers and Images
