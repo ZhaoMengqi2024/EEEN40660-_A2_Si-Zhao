@@ -92,7 +92,7 @@ cd a_brilliant_group
 ```
 Creat a text file ,then show the created directory and file contents
 The file `members.txt` contains our group member information and was created inside the container at `/a_brilliant_group/`.
-Here is the file:
+Here is the file: [members.txt](https://github.com/ZhaoMengqi2024/EEEN40660-_A2_Si-Zhao/blob/master/Task1/members.txt)
 
 ---
 ## 6. Commit Image and Push to Docker Hub
