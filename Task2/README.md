@@ -1,7 +1,7 @@
-# Docker Image: 2025sizhao/ubuntu-custom
+# Task 1
 
 ##  Overview
-This Docker image was created for **COMP40660 Assignment 2 - Task 1**.  
+Docker Image: 2025sizhao/ubuntu-custom.This Docker image was created for **COMP40660 Assignment 2 - Task 1**.  
 It contains a custom Ubuntu environment set up to demonstrate inter-process communication (IPC) between containers using Python and Unix domain sockets.
 
 This image includes:
