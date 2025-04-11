@@ -28,7 +28,10 @@ Ping the Other Containers
 ping 172.17.0.3
 ping 172.17.0.4
 ```
+
 repeated above steps and test the ping between alpine2 and alpine3
+
+
 ---
 ## 2. IPC Between Ubuntu Containers (Unix Socket)
 Create Project Folder and Script
@@ -62,6 +65,8 @@ python3
 Send Message The client creates a socket to /tmp/ipc_socket and sends "Hello from client".
 
 The server receives and prints the message, confirming IPC success.
+
+
 ---
 ## 3. IPC-Based Offloading Simulation
 Extending Task 2, this part implements a simple offloading simulation:
