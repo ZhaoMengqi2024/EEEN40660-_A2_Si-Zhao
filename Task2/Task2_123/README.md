@@ -15,7 +15,7 @@ Pull and Run Alpine Containers
 ```
 Get Container IP Addresses
 ```bash
-Command: docker inspect -f '{{ .Name }} - {{ .NetworkSettings.IPAddress }}' $(docker ps -q)
+docker inspect -f '{{ .Name }} - {{ .NetworkSettings.IPAddress }}' $(docker ps -q)
 ```
 Enter the container and install ping in Alpine
 ```bash
