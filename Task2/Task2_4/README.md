@@ -1,142 +1,76 @@
 
-# Task 1: Basic Docker Virtualization - COMP40660
+#  Task 2_4
 
-## Overview
+# Ⅰ. server
+##  Overview
 
-This Docker image was created for **COMP40660 Assignment 2 - Task 1**. It demonstrates the usage of Ubuntu-based Docker containers with essential tools and a custom file to fulfill six core tasks related to containerization.
+This server container handles retail transaction data processing. It reads retail records provided by the client via a shared Docker volume, performs data cleaning, statistical analysis (e.g., total sales, revenue, and top product categories), and writes the results back to the volume for client retrieval. It is designed to simulate a real-world offloading system, improving efficiency for large-scale datasets.
 
-Docker Hub URL: https://hub.docker.com/r/2025sizhao/ubuntu-custom
-
----
-
-## 1. Pull and Run Popular Docker Images
-
-We tested the following common Docker images:
-- `hello-world`
-- `Alpine`
-- `Nginx`
-- `busybox`
-
-Example commands:
-```bash
-sudo docker run hello-world
-sudo docker run alpine echo "Hello from Alpine"
-sudo docker run -d -p 8080:80 nginx
-sudo docker run busybox echo "Hello from BusyBox"
-```
+Docker Hub URL: [https://hub.docker.com/repository/docker/2025sizhao/our_server](https://hub.docker.com/repository/docker/2025sizhao/our_server)
 
 ---
 
-## 2. Show Running Containers
+## 1. Features
 
-We listed all containers and images:
-```bash
-sudo docker ps -a
-sudo docker images
-```
-We stop them using:
-```bash
-sudo docker stop $(sudo docker ps -q)
-```
-We removed all containers and images using:
-```bash
-sudo docker rm $(sudo docker ps -a -q)
-sudo docker rmi $(sudo docker images -q)
-```
----
-## 3. Run Nginx Server with Custom HTML Message
+- Automatic waiting for input data (```input.json```) from the client.
 
-Create a Local Directory
+- Full data cleaning: standardizes payment types, dates, product categories, and removes invalid or duplicate records.
 
-```bash
-mkdir ~/our-nginx-site
-cd ~/our-nginx-site
-```
-Create an index.html File
+- Retail sales data analysis: calculates total transactions, revenue, top categories.
 
-```bash
-nano index.html
-```
-Click the link to open the file we created: 
+- Result output (```result.json```) returned to the client.
 
-```html
-indexhtml
-```
+- Automatic cleanup of processed input files.
 
-Run the Nginx Docker Container with Volume Mount
-```bash
-sudo docker run -d -p 8081:80 -v ~/our-nginx-site:/usr/share/nginx/html:ro nginx
-```
-
-Open your web browser and visit:
-
-```html
-http://localhost
-```
+- Interactive console display for analysis results.
 
 
 
+## 2. How to Use
+
+a. Build the server image (if needed locally):
+```sudo docker build --no-cache -t our_server server/```
+
+b. Pull the server image (if using Docker Hub):
+```docker pull 2025sizhao/our_server:oursystem```
+
+c. Run the server container:
+```sudo docker run -it --network your_network_name -v $(pwd)/shared_data:/data --name your_server_container 2025sizhao/our_server:oursystem```
+
+## Note: Ensure a shared volume (/data) exists and the client container has sent the ```input.json``` file before server starts processing.
 
 
+# Ⅱ. client
+##  Overview
+This client container is responsible for preparing and sending retail transaction data to the server via a shared Docker volume. It reads a local JSON dataset, writes the input for server processing, waits for the analysis results, measures the offloading time, and finally displays the results to the user. It simulates the real-world offloading of computation-intensive tasks from a client device to a more powerful server.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 4. Boot Ubuntu Container and Install Tools
-
-We installed tools like `nano` and `iputils-ping`:
-```bash
-docker run --rm -it ubuntu bash
-apt update && apt install -y nano iputils-ping
-```
+Docker Hub URL: [https://hub.docker.com/repository/docker/2025sizhao/our_client/general](https://hub.docker.com/repository/docker/2025sizhao/our_client/general)
 
 ---
+## 1. Features
 
-## 5. Create Directory and File Inside Container
+- Reads retail dataset (```Retail_Sales_in_2024.json```) locally inside the container.
 
-Inside Ubuntu container:
-```bash
-mkdir -p /opt/task1
-echo "Group: COMP40660 - Sizhao 2025" > /opt/task1/annotation.txt
-cat /opt/task1/annotation.txt
-```
+- Sends data to server through a shared volume (```input.json```).
 
----
+- Waits for the server to return analysis results (```result.json```).
 
-## 6. Commit Image and Push to Docker Hub
+- Measures the total offloading time for performance evaluation.
 
-```bash
-docker commit <container_id> 2025sizhao/ubuntu-custom
-docker push 2025sizhao/ubuntu-custom
-```
+- Cleans up the result file after reading to prepare for the next offloading task.
 
-To run it:
-```bash
-docker pull 2025sizhao/ubuntu-custom
-docker run --rm -it 2025sizhao/ubuntu-custom
-```
+- Interactive display of results and timing in the console.
+## 2. How to Use
+a. Build the client image (if needed locally):
+```sudo docker build --no-cache -t our_client client/```
 
----
+b. Pull the client image (if using Docker Hub):
+```docker pull 2025sizhao/our_client:oursystem```
 
-## Dockerfile Summary
+c. Run the client container:
+```sudo docker run -it --network your_network_name -v $(pwd)/shared_data:/data --name your_client_container your_client_image_name```
 
-```Dockerfile
-FROM ubuntu:latest
-RUN apt update && apt install -y python3 nano iputils-ping
-COPY ipc_server.py /ipc_server.py
-CMD ["python3", "/ipc_server.py"]
-```
+## Note: Ensure that the server container is already running and ready to process the incoming data.
 
 ---
 ## Author
