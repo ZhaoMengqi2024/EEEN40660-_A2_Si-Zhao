@@ -37,8 +37,10 @@ b. Pull the server image (if using Docker Hub):
 c. Run the server container:
 ```sudo docker run -it --network your_network_name -v $(pwd)/shared_data:/data --name your_server_container 2025sizhao/our_server:oursystem```
 
-## Note: Ensure a shared volume (/data) exists and the client container has sent the ```input.json``` file before server starts processing.
+### Note: Ensure a shared volume (/data) exists and the client container has sent the ```input.json``` file before server starts processing.
 
+---
+---
 
 # Ⅱ. client
 ##  Overview
@@ -70,7 +72,7 @@ b. Pull the client image (if using Docker Hub):
 c. Run the client container:
 ```sudo docker run -it --network your_network_name -v $(pwd)/shared_data:/data --name your_client_container your_client_image_name```
 
-## Note: Ensure that the server container is already running and ready to process the incoming data.
+### Note: Ensure that the server container is already running and ready to process the incoming data.
 
 ---
 ## Author
